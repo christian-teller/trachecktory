@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import Shell from './Shell';

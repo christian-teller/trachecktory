@@ -2,3 +2,12 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+
+.added-headers-box {
+  border: 1px solid black;
+}
+
+.send-btn {
+  border: 1px solid black;
+  border-radius: 10px;
+}

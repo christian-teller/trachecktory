@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
 import {
+  List,
   Select,
   TextInput,
   Button,
@@ -15,9 +16,14 @@ import {
   ActionIcon,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { CubeSend } from 'tabler-icons-react';
 import qs from 'qs';
+import './App.css';
+
+const axiosApiInstance = axios.create();
 
 export default function ConfigForm() {
+  // Request Config Hooks:
   const form = useForm({
     initialValues: {
       client_id: '',
@@ -27,36 +33,28 @@ export default function ConfigForm() {
       requestMethod: '',
       grant_type: 'client_credentials',
       token: '',
-      headers: {},
     },
   });
+  const [headers, setHeaders] = useState<Object>({
+    'Content-Type': 'application/x-www-form-urlencoded',
+  });
+  const [key, setKey] = useState<string>('');
+  const [value, setValue] = useState<string>('');
 
-  let keyValuePairs = {
-    key: '',
-    value: '',
+  const api = axios.create({
+    baseURL: form.values.server_url,
+    headers: { headers },
+  });
+
+  const handleSubmit = () => {
+    console.log('idk lol');
   };
 
-  let customHeaders = `${keyValuePairs.key} : ${keyValuePairs.value}`;
-
-  const handleKeyValueChange = (e: any) => {
-    if (e.target.id === 'new_key') {
-      keyValuePairs.key = e.target.value;
-      console.log(`new key is currently: ${e.target.value}`);
-    }
-    if (e.target.id === 'new_value') {
-      keyValuePairs.value = e.target.value;
-      console.log(`new value is currently: ${e.target.value}`);
-    }
-  };
-
-  function handleAddHeader() {
-    console.log(customHeaders);
-  }
-
-  const handleSubmit = (e: any) => {
+  const grabToken = (e: any) => {
     e.preventDefault();
     console.log(form.values);
     console.log(e);
+    //GET TOKEN
     axios
       .post(
         form.values.server_url + form.values.serverEndpoint,
@@ -64,17 +62,11 @@ export default function ConfigForm() {
           client_id: form.values.client_id.toString(),
           client_secret: form.values.client_secret.toString(),
         }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
+        { headers }
       )
       .then(function (response: any) {
         console.log(response.status);
-        console.log('======================|TOKEN|=====================');
         console.log(response.data.access_token);
-        console.log('==================================================');
         response.data.access_token = form.getInputProps('token');
         return response;
       })
@@ -124,7 +116,6 @@ export default function ConfigForm() {
               />
             </Box>
             <Space h="lg" />
-            <Button type="submit">SET</Button>
           </Grid.Col>
           <Grid.Col p={20} sm={7}>
             <Title align="center" order={4}>
@@ -134,32 +125,56 @@ export default function ConfigForm() {
             <Box className="headers">
               <Group grow align="flex-end" position="center">
                 <TextInput
-                  onChange={handleKeyValueChange}
-                  id="new_key"
-                  name="KEY"
-                  mx={0}
                   label="KEY"
                   placeholder="KEY"
-                  size="xs"
+                  type="text"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
                 />
                 <TextInput
-                  onChange={handleKeyValueChange}
-                  id="new_value"
-                  name="VALUE"
-                  mx={0}
                   label="VALUE"
                   placeholder="VALUE"
-                  size="xs"
+                  type="text"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
                 />
-                <ActionIcon
-                  sx={{
-                    maxWidth: '40px',
+                <Button
+                  onClick={() => {
+                    const newHeaders = { ...headers };
+                    newHeaders[key] = value;
+                    setHeaders(newHeaders);
+                    setKey('');
+                    setValue('');
+                    console.log(headers);
+                    console.log(newHeaders);
                   }}
-                  size={30}
-                  variant="filled"
-                  onClick={handleAddHeader}
                 >
-                  +
+                  Add Header
+                </Button>
+              </Group>
+              <Box py={20}>
+                <Divider
+                  my="xs"
+                  size="md"
+                  label="Added Headers"
+                  labelPosition="center"
+                />
+                <List className="header-list" size="sm" withPadding>
+                  {Object.entries(headers).map(([key, value]) => (
+                    <List.Item key={key}>
+                      {key} : {value}
+                    </List.Item>
+                  ))}
+                </List>
+              </Box>
+            </Box>
+          </Grid.Col>
+          <Grid.Col sm={12}>
+            <Box py={25}>
+              <Group grow>
+                <ActionIcon p={20} type="submit" className="send-btn">
+                  <Title order={3}>SEND</Title>
+                  <CubeSend size={60} strokeWidth={1} color="black" />
                 </ActionIcon>
               </Group>
             </Box>
