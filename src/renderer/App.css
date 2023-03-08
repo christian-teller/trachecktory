@@ -1,13 +1,12 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
+ .simplebar-scrollbar::before {
+  background-color: #0d478ab9;
+}
 
 .added-headers-box {
   border: 1px solid black;
 }
 
 .send-btn {
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.295);
   border-radius: 10px;
 }

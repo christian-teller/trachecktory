@@ -9,3 +9,28 @@
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+.title-bar {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #23CFC4 43%, #0e6dd8 100%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.37);
+}
+
+.title {
+  text-shadow: 1px 1px 1px #ffffff;
+  padding-left: 10px;
+}
+
+
+
+
+/* MAKE TOP BAR DRAGGABLE FOR ELECTRON */
+.drag {
+  -webkit-user-select: none !important;
+  -webkit-app-region: drag !important;
+}
+.no-drag {
+  -webkit-app-region: no-drag !important;
+}

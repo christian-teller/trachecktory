@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import {
   AppShell,
-  Navbar,
+  Flex,
   Title,
   Header,
-  Text,
-  MediaQuery,
   Burger,
   useMantineTheme,
 } from '@mantine/core';
@@ -56,13 +54,9 @@ export default function Shell() {
       // }
       header={
         <Header
-          sx={{
-            backgroundColor: '#2C3333',
-          }}
+          className='title-bar drag'
           height={{ base: 50, md: 70 }}
-          p="md"
         >
-          <div>
             {/* <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
                 opened={opened}
@@ -72,10 +66,12 @@ export default function Shell() {
                 mr="xl"
               />
             </MediaQuery> */}
-            <Title className="nonselectable" order={3}>
+            <Title
+              pl={10}
+              className="nonselectable no-drag"
+              order={3}>
               TRACHECKTORY
             </Title>
-          </div>
         </Header>
       }
     >
