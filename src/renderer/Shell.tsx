@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import ConfigForm from './ConfigForm';
 import LeftNav from './LeftNav';
+import TopBar from './TopBar';
 import './Shell.css';
 
 export default function Shell() {
@@ -53,26 +54,7 @@ export default function Shell() {
       //   </Footer>
       // }
       header={
-        <Header
-          className='title-bar drag'
-          height={{ base: 50, md: 70 }}
-        >
-            {/* <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery> */}
-            <Title
-              pl={10}
-              className="nonselectable no-drag"
-              order={3}>
-              TRACHECKTORY
-            </Title>
-        </Header>
+        <TopBar/>
       }
     >
       <ConfigForm />

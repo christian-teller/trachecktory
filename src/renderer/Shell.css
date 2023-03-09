@@ -34,3 +34,16 @@
 .no-drag {
   -webkit-app-region: no-drag !important;
 }
+
+.btn-top {
+  color: rgb(0, 0, 0) !important;
+}
+
+.btn-top-grp:hover {
+  color: red !important;
+  background-color: rgba(23, 112, 190, 0) !important;
+}
+.btn-top-grp {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
