@@ -8,7 +8,6 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import ConfigForm from './ConfigForm';
-import LeftNav from './LeftNav';
 import TopBar from './TopBar';
 import './Shell.css';
 

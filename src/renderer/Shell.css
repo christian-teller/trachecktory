@@ -14,17 +14,15 @@
   display: flex !important;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to right, #23CFC4 43%, #0e6dd8 100%) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.37);
+  border-bottom: 1px solid #00000025;
+  /* background-color: rgb(154, 240, 255); */
+  background-color: rgb(148, 253, 253);
 }
 
 .title {
   text-shadow: 1px 1px 1px #ffffff;
   padding-left: 10px;
 }
-
-
-
 
 /* MAKE TOP BAR DRAGGABLE FOR ELECTRON */
 .drag {

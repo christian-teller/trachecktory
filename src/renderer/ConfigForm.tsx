@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import {
+  Paper,
   List,
-  MultiSelect,
   Select,
   TextInput,
   Button,
@@ -13,13 +13,17 @@ import {
   Container,
   Title,
   Group,
-  Divider,
   ActionIcon,
+  Text,
+  Divider,
+  Flex,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { CubeSend, LetterX } from 'tabler-icons-react';
+import { CubeSend, TrashX } from 'tabler-icons-react';
 import qs from 'qs';
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 import './App.css';
 
 const axiosApiInstance = axios.create();
@@ -39,8 +43,13 @@ export default function ConfigForm() {
   const [actionSelector, setActionSelector] = useState('');
 
   // user authentication hooks
-  const [client_id, setClientId] = useState('');
-  const [client_secret, setClientSecret] = useState('');
+  const [client_id, setClientId] = useState('EKS upgrade');
+  const [client_secret, setClientSecret] = useState(
+    '300dad74-5367-4365-af4f-46b5a71628df'
+  );
+  const [preparer_id, setPreparerId] = useState('');
+  const [token, setToken] = useState('');
+
   //headers hook
   const [headers, setHeaders] = useState<Object>({
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,15 +58,10 @@ export default function ConfigForm() {
   const [key, setKey] = useState<string>('');
   const [value, setValue] = useState<string>('');
   //url hook
-  const [apiUrl, setApiUrl] = useState<string>('');
+  const [apiUrl, setApiUrl] = useState<string>(
+    'https://qa-gimli.ci.apexpickup.com'
+  );
   const [endpoint, setEndpoint] = useState<string>('');
-  // -------------------------------------------------------------->
-
-  // axios passthrough
-  const api = axios.create({
-    baseURL: form.values.server_url,
-    headers: { headers },
-  });
 
   // -----------------------   HANDLERS   ------------------------->
   // action selected handler and conditional input content
@@ -70,7 +74,11 @@ export default function ConfigForm() {
   const conditionalParams = [
     { value: 'create-order', label: 'Create Order', group: 'Orders' },
     { value: 'get-orders', label: 'Get Orders', group: 'Orders' },
-    { value: 'get-order-site-id', label: 'Get Order By Site', group: 'Orders' },
+    {
+      value: 'get-order-site-id',
+      label: 'Get Order  By Site',
+      group: 'Orders',
+    },
     {
       value: 'get-order-schedule-id',
       label: 'Get Order By Schedule',
@@ -88,6 +96,9 @@ export default function ConfigForm() {
     } else if (name === 'clientSecret') {
       setClientSecret(value);
       console.log(client_secret);
+    } else if (name === 'preparerId') {
+      setPreparerId(value);
+      console.log(preparer_id);
     }
   };
 
@@ -105,8 +116,15 @@ export default function ConfigForm() {
 
   // big submit button click
   const handleSubmit = () => {
-    console.log('idk lol');
+    grabToken;
+    console.log(token);
   };
+
+  // axios passthrough
+  const api = axios.create({
+    baseURL: form.values.server_url,
+    headers: { headers },
+  });
 
   const grabToken = (e: any) => {
     e.preventDefault();
@@ -115,17 +133,18 @@ export default function ConfigForm() {
     //GET TOKEN
     axios
       .post(
-        form.values.server_url + form.values.serverEndpoint,
+        apiUrl + '/token',
         qs.stringify({
-          client_id: form.values.client_id.toString(),
-          client_secret: form.values.client_secret.toString(),
+          client_id: client_id.toString(),
+          client_secret: client_secret.toString(),
         }),
         { headers }
       )
       .then(function (response: any) {
+        console.log(response);
         console.log(response.status);
         console.log(response.data.access_token);
-        response.data.access_token = form.getInputProps('token');
+        setToken(response.data.access_token);
         return response;
       })
       .catch(function (error: any) {
@@ -133,184 +152,374 @@ export default function ConfigForm() {
       });
   };
 
+  const makeRequest = (e: any) => {
+    e.preventDefault();
+    // grabToken();
+  };
+
   return (
     <Container className="contain">
       <form className="auth" onSubmit={handleSubmit}>
         <Grid>
-          <Grid.Col className="user-creds" p={20} sm={5}>
-            <Group grow align="flex-end" position="center">
-              <Select
-                size="xs"
-                label="Server URL:"
-                defaultValue={'https://qa-gimli.ci.apexpickup.com'}
-                data={[
-                  {
-                    name: 'QA',
-                    value: 'https://qa-gimli.ci.apexpickup.com',
-                    label: 'QA ',
-                  },
-                  {
-                    name: 'UAT',
-                    value: 'https://uat-gimli.stg.apexpickup.com',
-                    label: 'UAT',
-                  },
-                ]}
-                onChange={handleUrlChange}
-              />
-              <Select
-                size="xs"
-                label="Action:"
-                placeholder="Select action"
-                data={conditionalParams}
-                onChange={handleActionChange}
-                value={actionSelector}
-              />
-            </Group>
-            <Space h="xs" />
-            <Box>
+          <Grid.Col className="user-creds" sm={5}>
+            <Space h="md" />
+            <Box className="section-bg">
+              <Group pb="12px" grow align="flex-end" position="center">
+                <Select
+                  size="xs"
+                  label="Server URL:"
+                  defaultValue={'https://qa-gimli.ci.apexpickup.com'}
+                  data={[
+                    {
+                      name: 'QA',
+                      value: 'https://qa-gimli.ci.apexpickup.com',
+                      label: 'QA ',
+                    },
+                    {
+                      name: 'UAT',
+                      value: 'https://uat-gimli.stg.apexpickup.com',
+                      label: 'UAT',
+                    },
+                  ]}
+                  onChange={handleUrlChange}
+                />
+                <Select
+                  size="xs"
+                  label="Action: "
+                  placeholder="Select action"
+                  data={conditionalParams}
+                  onChange={handleActionChange}
+                  value={actionSelector}
+                />
+              </Group>
+              <Divider />
               {actionSelector === '' && (
                 <>
-                  <Box>
-                <Space h="lg" />
-                <Space h="lg" />
-                <Space h="lg" />
+                  <Box className="dynamic-fields">
+                    <Text
+                      sx={{
+                        paddingTop: '28px',
+                        fontStyle: 'italic',
+                      }}
+                      align="center"
+                    >
+                      Please select action.
+                    </Text>
                   </Box>
                 </>
               )}
               {actionSelector === 'get-orders' && (
                 <>
-                  <h3>get orders</h3>
-                  <p>hey hey hey hey</p>
+                  <Paper
+                    sx={{
+                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                    }}
+                    shadow="md"
+                    p="xs"
+                    className="headers"
+                    withBorder
+                  >
+                    <TextInput
+                      label="Preparer ID: "
+                      radius="sm"
+                      name="preparerId"
+                      size="xs"
+                      placeholder="Preparer ID"
+                      value={preparer_id}
+                      onChange={handleChange}
+                    />
+                  </Paper>
+                </>
+              )}
+              {actionSelector === 'create-order' && (
+                <>
+                  <Paper
+                    sx={{
+                      backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                    }}
+                    p="xs"
+                  >
+                    <TextInput
+                      label="Preparer ID:"
+                      radius="sm"
+                      name="preparerId"
+                      size="xs"
+                      placeholder="Preparer ID"
+                      value={preparer_id}
+                      onChange={handleChange}
+                    />
+                    <Group pt="20px" pr="20px" position="right">
+                      <Button color="cyan" size="lg" compact>
+                        SEND
+                      </Button>
+                    </Group>
+                  </Paper>
+                </>
+              )}
+              {actionSelector === 'get-order-site-id' && (
+                <>
+                  <Paper
+                    sx={{
+                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                    }}
+                    shadow="md"
+                    p="xs"
+                    className="headers"
+                    withBorder
+                  >
+                    <TextInput
+                      label="Preparer ID:"
+                      radius="sm"
+                      name="preparerId"
+                      size="xs"
+                      placeholder="Preparer ID"
+                      value={preparer_id}
+                      onChange={handleChange}
+                    />{' '}
+                    <Space h="md" />
+                    <Group grow position="center">
+                      <Button
+                        variant="gradient"
+                        gradient={{ from: 'teal', to: 'blue', deg: 45 }}
+                        size="xs"
+                        onClick={handleSubmit}
+                      >
+                        Send
+                      </Button>
+                    </Group>
+                  </Paper>
+                </>
+              )}
+              {actionSelector === 'get-order-schedule-id' && (
+                <>
+                  <Paper
+                    sx={{
+                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                    }}
+                    shadow="md"
+                    p="xs"
+                    className="headers"
+                    withBorder
+                  >
+                    <TextInput
+                      label="Preparer ID:"
+                      radius="sm"
+                      name="preparerId"
+                      size="xs"
+                      placeholder="Preparer ID"
+                      value={preparer_id}
+                      onChange={handleChange}
+                    />
+                    <ActionIcon>
+                      <CubeSend onClick={handleSubmit} />
+                    </ActionIcon>
+                  </Paper>
+                </>
+              )}
+              {actionSelector === 'get-clients' && (
+                <>
+                  <Paper
+                    sx={{
+                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                    }}
+                    shadow="md"
+                    p="xs"
+                    className="headers"
+                    withBorder
+                  >
+                    <TextInput
+                      label="Preparer ID:"
+                      radius="sm"
+                      name="preparerId"
+                      size="xs"
+                      placeholder="Preparer ID"
+                      value={preparer_id}
+                      onChange={handleChange}
+                    />
+                    <ActionIcon>
+                      <CubeSend onClick={handleSubmit} />
+                    </ActionIcon>
+                  </Paper>
                 </>
               )}
             </Box>
-            <Space h="xl" />
-            <Title align="center" order={4}>
-              Authentication
-            </Title>
-            <Divider size="md" my="xs" labelPosition="center" />
-            <Box>
-              <TextInput
-                radius="lg"
-                name="clientId"
-                size="xs"
-                label="Client ID:"
-                placeholder="Client ID"
-                // {...form.getInputProps('client_id')}
-                value={client_id}
-                onChange={handleChange}
-              />
-            </Box>
-            <Box>
-              <TextInput
-                radius="lg"
-                name="clientSecret"
-                size="xs"
-                label="Client Secret:"
-                placeholder="Client Secret"
-                value={client_secret}
-                onChange={handleChange}
-              />
-              <Space h="md" />
-            </Box>
-            <Space h="lg" />
           </Grid.Col>
-          <Grid.Col p={20} sm={7}>
-            <Title align="center" order={4}>
-              Headers
-            </Title>
-            <Divider size="md" my="xs" labelPosition="center" />
-            <Box className="headers">
-              <Group grow align="flex-end" position="center">
-                <TextInput
-                  radius="lg"
-                  size="xs"
-                  label="KEY"
-                  placeholder="KEY"
-                  type="text"
-                  value={key}
-                  onChange={(e) => setKey(e.target.value)}
-                />
-                <TextInput
-                  radius="lg"
-                  size="xs"
-                  label="VALUE"
-                  placeholder="VALUE"
-                  type="text"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                />
-                <Button
-                  className="send-btn"
-                  size="xs"
-                  radius="lg"
-                  variant="gradient"
-                  gradient={{ from: 'teal', to: 'blue', deg: 60 }}
-                  onClick={() => {
-                    const newHeaders = { ...headers };
-                    newHeaders[key] = value;
-                    setHeaders(newHeaders);
-                    setKey('');
-                    setValue('');
-                    console.log(apiUrl);
-                  }}
-                >
-                  Add Header
-                </Button>
-              </Group>
-              <Box py={20}>
-                <Divider
-                  my="xs"
-                  size="md"
-                  label="Applied Headers"
-                  labelPosition="center"
-                />
-                <List className="header-list" size="sm" withPadding>
-                  {Object.entries(headers).map(([key, value]) => (
-                    <List.Item
-                      key={key}
-                      sx={{
-                        overflowX: 'hidden',
-                        wordWrap: 'break-word !improtant',
-                        fontSize: '.8em',
-                      }}
-                    >
-                      {`${key}: ${value}`}{' '}
-                      <Button
-                        variant="gradient"
-                        gradient={{ from: 'red', to: 'darkred', deg: 60 }}
-                        compact
-                        onClick={() => {
-                          handleRemoveHeader(key);
-                        }}
-                        size="xs"
-                      >
-                        x
-                      </Button>
-                    </List.Item>
-                  ))}
-                </List>
+          <Grid.Col md={7} sm={7}>
+            <Paper
+              sx={{
+                backgroundColor: 'rgba(0, 217, 255, 0.048)',
+              }}
+              p="xs"
+              className="headers"
+              withBorder
+            >
+              <Title align="center" order={4}>
+                Authentication
+              </Title>
+              <Space h="md" />
+              <Box>
+                <Group grow>
+                  <TextInput
+                    radius="sm"
+                    name="clientId"
+                    size="xs"
+                    placeholder="Client ID"
+                    // {...form.getInputProps('client_id')}
+                    value={client_id}
+                    onChange={handleChange}
+                  />
+                  <TextInput
+                    radius="sm"
+                    name="clientSecret"
+                    size="xs"
+                    placeholder="Client Secret"
+                    value={client_secret}
+                    onChange={handleChange}
+                  />
+                </Group>
               </Box>
-            </Box>
+            </Paper>
+            <Space h="md" />
+            <Grid grow>
+              <Grid.Col>
+                <Paper
+                  sx={{
+                    backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                  }}
+                  p="lg"
+                  className="headers"
+                  withBorder
+                >
+                  <Title align="center" order={4}>
+                    Headers
+                  </Title>
+                  <Space h="md" />
+                  <Group grow>
+                    <TextInput
+                      size="xs"
+                      radius="sm"
+                      placeholder="KEY"
+                      type="text"
+                      value={key}
+                      onChange={(e) => setKey(e.target.value)}
+                    />
+                    <TextInput
+                      radius="sm"
+                      placeholder="VALUE"
+                      type="text"
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                      size="xs"
+                      rightSection={
+                        <Button
+                          className="btn-blue"
+                          compact
+                          size="xs"
+                          radius="sm"
+                          onClick={() => {
+                            console.log(`{${key}:${value}}`);
+                            if (key !== '' && value !== '') {
+                              const newHeaders = { ...headers };
+                              newHeaders[key] = value;
+                              setHeaders(newHeaders);
+                              setKey('');
+                              setValue('');
+                              setHeaders(newHeaders);
+                              console.log(apiUrl);
+                            } else {
+                            }
+                          }}
+                        >
+                          +
+                        </Button>
+                      }
+                    />
+                  </Group>
+                  <Space h="md" />
+                  <Box
+                    sx={{
+                      overflowX: 'hidden',
+                      border: '1px solid #00000025',
+                      borderRadius: '6px',
+                      backgroundColor: 'white',
+                    }}
+                    p={6}
+                  >
+                    <List className="header-list" size="sm" withPadding>
+                      {Object.entries(headers).map(([key, value]) => (
+                        <List.Item
+                          key={key}
+                          sx={{
+                            overflowX: 'hidden',
+                            wordWrap: 'break-word !improtant',
+                            fontSize: '.8em',
+                          }}
+                        >
+                          {`{ ${key}: ${value} }  `}
+                          <Button
+                            ml="4px"
+                            compact
+                            variant="transparent"
+                            color="red"
+                            onClick={() => {
+                              handleRemoveHeader(key);
+                            }}
+                            size="xs"
+                          >
+                            X
+                          </Button>
+                        </List.Item>
+                      ))}
+                    </List>
+                  </Box>
+                </Paper>
+              </Grid.Col>
+            </Grid>
+
+            <Space h="md" />
           </Grid.Col>
           <Grid.Col sm={12}>
             <Box py={25}>
-              <Group grow>
+              <Group position="center" grow>
                 <ActionIcon
+                  display="none"
                   variant="gradient"
                   gradient={{ from: 'teal', to: 'blue', deg: 60 }}
                   p={20}
                   type="submit"
                   className="send-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log(
+                      'Client ID: ' + client_id,
+                      'PREPARER ID: ' + preparer_id
+                    );
+                  }}
                 >
                   <Title order={3}>SEND</Title>
                   <CubeSend size={60} strokeWidth={1} color="black" />
                 </ActionIcon>
+                <Button className="btn-blue" color="cyan" onClick={grabToken}>
+                  <Title order={4}>TOKEN</Title>
+                </Button>
               </Group>
-              <Space h="xl" />
-              <Box>
-                <p>{apiUrl}</p>
-              </Box>
+              <Space h="md" />
+              <SimpleBar forceVisible="y">
+                <Paper
+                  sx={{
+                    backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                    padding: '16px',
+                    border: '1px solid rgba(0, 0, 0, 0.178)'
+
+                  }}
+                  shadow="md"
+                >
+                  server url: {apiUrl}
+                  <br />
+                  client id and secret: {client_id} | {client_secret} <br />
+                  <Box>token: {token}</Box>
+                </Paper>
+              </SimpleBar>
             </Box>
           </Grid.Col>
         </Grid>

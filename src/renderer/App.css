@@ -1,5 +1,5 @@
  .simplebar-scrollbar::before {
-  background-color: #0d478ab9;
+  background-color: #0d488cb9;
 }
 
 .added-headers-box {
@@ -9,4 +9,37 @@
 .send-btn {
   border: 1px solid rgba(0, 0, 0, 0.295);
   border-radius: 20px;
+}
+
+.dynamic-fields {
+  height: 200px;
+}
+
+.section-bg {
+  padding: 16px;
+  border: 1px solid #00000025;
+  border-radius: 6px;
+  background-color: rgba(0, 217, 255, 0.048);
+}
+
+.test {
+  border: 1px solid red;
+}
+
+.trashButton {
+  height: 16px;
+  width: 16px;
+  border: none !important;
+  margin-top: 8px;
+}
+
+.btn-blue {
+  color: black !important;
+  border: 1px solid rgba(0, 0, 0, 0.178);
+  background-color: rgb(148, 253, 253) !important;
+}
+
+.btn-red {
+  color: black !important;
+  background-color: rgb(216, 83, 83) !important;
 }
