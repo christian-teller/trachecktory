@@ -45,3 +45,8 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+.window-buttons {
+  border: 1px solid red !important;
+}
+

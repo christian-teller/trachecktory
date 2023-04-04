@@ -10,8 +10,10 @@ import './App.css';
 function Hello() {
   return (
     <SimpleBar
+      autoHide={false}
       style={{
-        maxHeight: "100vh"
+        maxHeight: "100vh",
+
       }}>
       <MantineProvider
         theme={{

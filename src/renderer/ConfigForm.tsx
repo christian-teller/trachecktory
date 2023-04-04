@@ -13,18 +13,19 @@ import {
   Container,
   Title,
   Group,
-  ActionIcon,
+  Code,
+  Accordion,
   Text,
   Divider,
-  Flex,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { CubeSend, TrashX } from 'tabler-icons-react';
+import { CubeSend, TrashX, ChevronDown, Tie } from 'tabler-icons-react';
 import qs from 'qs';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import './App.css';
+import { render } from '@testing-library/react';
 
 const axiosApiInstance = axios.create();
 
@@ -86,6 +87,23 @@ export default function ConfigForm() {
     },
     { value: 'get-clients', label: 'Get All Clients', group: 'Clients' },
   ];
+
+  const orderDetailsBodyRaw = [
+
+  ]
+
+  const bodyObjInput = () => {
+    return (
+      <>
+        {' '}
+        <Space h="sm" />
+        <Button className="btn-blue" color="cyan" size="xs">
+          Edit Order Details
+          <ChevronDown size={12} strokeWidth={3} color={'black'} />
+        </Button>
+      </>
+    );
+  };
 
   // authentication handler
   const handleChange = (e: any) => {
@@ -157,12 +175,26 @@ export default function ConfigForm() {
     // grabToken();
   };
 
+  const sendRequestButton = () => {
+    return (
+      <Group grow position="center">
+        <Button
+          className="btn-blue"
+          color="cyan"
+          size="xs"
+          onClick={handleSubmit}
+        >
+          Send
+        </Button>
+      </Group>
+    );
+  };
+
   return (
     <Container className="contain">
       <form className="auth" onSubmit={handleSubmit}>
         <Grid>
           <Grid.Col className="user-creds" sm={5}>
-            <Space h="md" />
             <Box className="section-bg">
               <Group pb="12px" grow align="flex-end" position="center">
                 <Select
@@ -212,15 +244,12 @@ export default function ConfigForm() {
                 <>
                   <Paper
                     sx={{
-                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                      backgroundColor: 'rgba(0, 217, 255, 0.0)',
                     }}
-                    shadow="md"
                     p="xs"
-                    className="headers"
-                    withBorder
                   >
                     <TextInput
-                      label="Preparer ID: "
+                      label="Preparer ID:"
                       radius="sm"
                       name="preparerId"
                       size="xs"
@@ -228,6 +257,9 @@ export default function ConfigForm() {
                       value={preparer_id}
                       onChange={handleChange}
                     />
+                    {bodyObjInput()}
+                    <Space h="sm" />
+                    {sendRequestButton()}
                   </Paper>
                 </>
               )}
@@ -248,11 +280,9 @@ export default function ConfigForm() {
                       value={preparer_id}
                       onChange={handleChange}
                     />
-                    <Group pt="20px" pr="20px" position="right">
-                      <Button color="cyan" size="lg" compact>
-                        SEND
-                      </Button>
-                    </Group>
+                    {bodyObjInput()}
+                    <Space h="sm" />
+                    {sendRequestButton()}
                   </Paper>
                 </>
               )}
@@ -260,12 +290,9 @@ export default function ConfigForm() {
                 <>
                   <Paper
                     sx={{
-                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                      backgroundColor: 'rgba(0, 217, 255, 0.0)',
                     }}
-                    shadow="md"
                     p="xs"
-                    className="headers"
-                    withBorder
                   >
                     <TextInput
                       label="Preparer ID:"
@@ -275,18 +302,10 @@ export default function ConfigForm() {
                       placeholder="Preparer ID"
                       value={preparer_id}
                       onChange={handleChange}
-                    />{' '}
-                    <Space h="md" />
-                    <Group grow position="center">
-                      <Button
-                        variant="gradient"
-                        gradient={{ from: 'teal', to: 'blue', deg: 45 }}
-                        size="xs"
-                        onClick={handleSubmit}
-                      >
-                        Send
-                      </Button>
-                    </Group>
+                    />
+                    {bodyObjInput()}
+                    <Space h="sm" />
+                    {sendRequestButton()}
                   </Paper>
                 </>
               )}
@@ -294,12 +313,9 @@ export default function ConfigForm() {
                 <>
                   <Paper
                     sx={{
-                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                      backgroundColor: 'rgba(0, 217, 255, 0.0)',
                     }}
-                    shadow="md"
                     p="xs"
-                    className="headers"
-                    withBorder
                   >
                     <TextInput
                       label="Preparer ID:"
@@ -310,9 +326,9 @@ export default function ConfigForm() {
                       value={preparer_id}
                       onChange={handleChange}
                     />
-                    <ActionIcon>
-                      <CubeSend onClick={handleSubmit} />
-                    </ActionIcon>
+                    {bodyObjInput()}
+                    <Space h="sm" />
+                    {sendRequestButton()}
                   </Paper>
                 </>
               )}
@@ -320,12 +336,9 @@ export default function ConfigForm() {
                 <>
                   <Paper
                     sx={{
-                      backgroundColor: 'rgba(0, 217, 255, 0.048)',
+                      backgroundColor: 'rgba(0, 217, 255, 0.0)',
                     }}
-                    shadow="md"
                     p="xs"
-                    className="headers"
-                    withBorder
                   >
                     <TextInput
                       label="Preparer ID:"
@@ -336,9 +349,9 @@ export default function ConfigForm() {
                       value={preparer_id}
                       onChange={handleChange}
                     />
-                    <ActionIcon>
-                      <CubeSend onClick={handleSubmit} />
-                    </ActionIcon>
+                    {bodyObjInput()}
+                    <Space h="sm" />
+                    {sendRequestButton()}
                   </Paper>
                 </>
               )}
@@ -479,45 +492,74 @@ export default function ConfigForm() {
             <Space h="md" />
           </Grid.Col>
           <Grid.Col sm={12}>
-            <Box py={25}>
-              <Group position="center" grow>
-                <ActionIcon
-                  display="none"
-                  variant="gradient"
-                  gradient={{ from: 'teal', to: 'blue', deg: 60 }}
-                  p={20}
-                  type="submit"
-                  className="send-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log(
-                      'Client ID: ' + client_id,
-                      'PREPARER ID: ' + preparer_id
-                    );
-                  }}
-                >
-                  <Title order={3}>SEND</Title>
-                  <CubeSend size={60} strokeWidth={1} color="black" />
-                </ActionIcon>
-                <Button className="btn-blue" color="cyan" onClick={grabToken}>
-                  <Title order={4}>TOKEN</Title>
-                </Button>
-              </Group>
+            <Box py={8}>
               <Space h="md" />
               <SimpleBar forceVisible="y">
                 <Paper
                   sx={{
                     backgroundColor: 'rgba(0, 217, 255, 0.048)',
                     padding: '16px',
-                    border: '1px solid rgba(0, 0, 0, 0.178)'
-
+                    border: '1px solid rgba(0, 0, 0, 0.178)',
+                    overflowWrap: 'break-word',
                   }}
                   shadow="md"
                 >
-                  server url: {apiUrl}
-                  <br />
-                  client id and secret: {client_id} | {client_secret} <br />
-                  <Box>token: {token}</Box>
+                  <Group position="center" grow>
+                    <Button
+                      className="btn-blue"
+                      color="cyan"
+                      onClick={grabToken}
+                    >
+                      <Title order={4}>GET TOKEN</Title>
+                    </Button>
+                  </Group>
+                  <Space h="sm" />
+                  <Accordion
+                    chevronPosition="left"
+                    variant="filled"
+                    defaultValue="customization"
+                  >
+                    <Accordion.Item
+                      value="auth"
+                      sx={{
+                        border: '1px solid rgba(0, 0, 0, 0.178)',
+                      }}
+                    >
+                      <Accordion.Control>
+                        <Title order={4}>Show Auth Settings</Title>
+                      </Accordion.Control>
+                      <Accordion.Panel
+                        sx={{
+                          borderTop: '1px solid rgba(0, 0, 0, 0.178)',
+                        }}
+                      >
+                        <Space h="sm" />
+                        <Title order={5}>Server url:</Title> {apiUrl}
+                        <Space h="sm" />
+                        <Title order={5}>Client ID and Secret:</Title>{' '}
+                        {client_id} | {client_secret}
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                    <Space h="sm" />
+                    <Accordion.Item
+                      value="token"
+                      sx={{
+                        border: '1px solid rgba(0, 0, 0, 0.178)',
+                      }}
+                    >
+                      <Accordion.Control>
+                        <Title order={4}>Show Token</Title>
+                      </Accordion.Control>
+                      <Accordion.Panel
+                        sx={{
+                          borderTop: '1px solid rgba(0, 0, 0, 0.178)',
+                        }}
+                      >
+                        <Space h="sm" />
+                        {token}
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  </Accordion>
                 </Paper>
               </SimpleBar>
             </Box>
