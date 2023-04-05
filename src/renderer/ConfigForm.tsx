@@ -17,6 +17,7 @@ import {
   Accordion,
   Text,
   Divider,
+  Input,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
@@ -25,6 +26,7 @@ import qs from 'qs';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import './App.css';
+
 import { render } from '@testing-library/react';
 
 const axiosApiInstance = axios.create();
@@ -50,6 +52,13 @@ export default function ConfigForm() {
   );
   const [preparer_id, setPreparerId] = useState('');
   const [token, setToken] = useState('');
+
+  //edit visible body hook
+  const [visible, setVisible] = useState(false);
+
+  //order body data variables
+  const [orderNumber, setOrderNumber] = useState('');
+  const [orderDescription, setOrderDescription] = useState('');
 
   //headers hook
   const [headers, setHeaders] = useState<Object>({
@@ -88,19 +97,71 @@ export default function ConfigForm() {
     { value: 'get-clients', label: 'Get All Clients', group: 'Clients' },
   ];
 
-  const orderDetailsBodyRaw = [
-
-  ]
+  const orderDetailsBodyRaw = `{\n  \"siteId\": \"{}\",
+  \n  \"extOrderId\": \"${orderNumber}\",
+  \n  \"orderDescription\": \"${orderDescription}\",
+  \n  \"orderExpirationDate\": \"1672852224000\",
+  \n  \"extCustomerPO\": \"ffff\",
+  \n  \"deviceSn\": \"000000000\",
+  \n  \"notes\": \"additional notes here\",
+  \n  \"pickupContact\": {\n    \"name\": \"I am the pick contact\",
+  \n    \"phone\": \"+573218468137\"\n  },
+  \n  \"tag\": {\n    \"id\": \"id-of-the-tag\",
+  \n    \"name\": \"name-of-the-tag\"\n  }\n}`;
 
   const bodyObjInput = () => {
+    const swapVis = () => {
+      if (visible) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+    };
+
+    let editBox: boolean = false;
+    if (visible) {
+      editBox = (
+        <Paper
+          sx={{
+            backgroundColor: 'rgba(0, 217, 255, 0.048)',
+            padding: '16px',
+            border: '1px solid rgba(0, 0, 0, 0.178)',
+          }}
+          p="xs"
+        >
+          <Input
+            size="xs"
+            placeholder="Order Number"
+            onChange={(e) => {
+              setOrderNumber(e.target.value);
+              console.log(orderNumber);
+            }}
+            value={orderNumber}
+          />
+          <Input
+            size="xs"
+            placeholder="Order Description"
+            onChange={(e) => {
+              setOrderDescription(e.target.value);
+              console.log(orderDescription);
+            }}
+            value={orderDescription}
+          />
+        </Paper>
+      );
+    }
+
     return (
       <>
         {' '}
         <Space h="sm" />
-        <Button className="btn-blue" color="cyan" size="xs">
-          Edit Order Details
-          <ChevronDown size={12} strokeWidth={3} color={'black'} />
-        </Button>
+        <Group grow position="center">
+          <Button onClick={swapVis} className="btn-blue" color="cyan" size="xs">
+            Edit Order Details
+            <ChevronDown size={12} strokeWidth={3} color={'black'} />
+          </Button>
+        </Group>
+        {editBox}
       </>
     );
   };
@@ -117,6 +178,12 @@ export default function ConfigForm() {
     } else if (name === 'preparerId') {
       setPreparerId(value);
       console.log(preparer_id);
+    } else if (name === 'orderDescription') {
+      setOrderDescription(value);
+      console.log(orderDescription);
+    } else if (name === 'orderNumber') {
+      setOrderNumber(value);
+      console.log(orderNumber)
     }
   };
 
@@ -488,7 +555,6 @@ export default function ConfigForm() {
                 </Paper>
               </Grid.Col>
             </Grid>
-
             <Space h="md" />
           </Grid.Col>
           <Grid.Col sm={12}>
