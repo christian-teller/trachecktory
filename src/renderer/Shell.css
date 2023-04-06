@@ -10,18 +10,24 @@
   user-select: none; /* Standard */
 }
 
+
 .title-bar {
   display: flex !important;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #00000025;
+  border: 1px solid #000000;
   /* background-color: rgb(154, 240, 255); */
-  background-color: rgb(148, 253, 253);
+  background-color: #222629;
+}
+
+.logo {
+  color: #F5F5F5;
 }
 
 .title {
   text-shadow: 1px 1px 1px #ffffff;
   padding-left: 10px;
+
 }
 
 /* MAKE TOP BAR DRAGGABLE FOR ELECTRON */
@@ -34,19 +40,11 @@
 }
 
 .btn-top {
-  color: rgb(0, 0, 0) !important;
+  color: #EFF0F1 !important;
 }
 
-.btn-top-grp:hover {
-  color: red !important;
-  background-color: rgba(23, 112, 190, 0) !important;
-}
+
 .btn-top-grp {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-
-.window-buttons {
-  border: 1px solid red !important;
-}
-

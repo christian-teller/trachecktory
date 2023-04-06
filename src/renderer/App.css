@@ -1,10 +1,11 @@
  .simplebar-scrollbar::before {
-  background-color: #0d488cb9;
+  background-color: #00f7d6b9;
 }
 
 .added-headers-box {
   border: 1px solid black;
 }
+
 
 .send-btn {
   border: 1px solid rgba(0, 0, 0, 0.295);
@@ -19,7 +20,8 @@
   padding: 16px;
   border: 1px solid #00000025;
   border-radius: 6px;
-  background-color: rgba(0, 217, 255, 0.048);
+  background-color: #EFF0F1;
+  /* background-color: rgba(0, 217, 255, 0.075); */
 }
 
 .test {
@@ -36,7 +38,7 @@
 .btn-blue {
   color: black !important;
   border: 1px solid rgba(0, 0, 0, 0.178);
-  background-color: rgb(148, 253, 253) !important;
+  background-color: #C7C7C7 !important;
 }
 
 .btn-red {

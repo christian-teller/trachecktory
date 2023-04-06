@@ -26,32 +26,6 @@ export default function Shell() {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      // navbar={
-      //   <Navbar
-      //     sx={{
-      //       backgroundColor: '#2C3333 !important',
-      //     }}
-      //     p="md"
-      //     hiddenBreakpoint="sm"
-      //     hidden={!opened}
-      //     width={{ sm: 200, lg: 300 }}
-      //   >
-      //     <LeftNav />
-      //   </Navbar>
-      // }
-      //= ===================================================
-      // aside={
-      //   <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-      //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-      //       <Text>Application sidebar</Text>
-      //     </Aside>
-      //   </MediaQuery>
-      // }
-      // footer={
-      //   <Footer height={60} p="md">
-      //     Application footer
-      //   </Footer>
-      // }
       header={
         <TopBar/>
       }
