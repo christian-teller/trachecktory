@@ -30,6 +30,9 @@ import './App.css';
 import { render } from '@testing-library/react';
 
 const axiosApiInstance = axios.create();
+const getPosts = () => {
+  return axiosApiInstance.get('https://jsonplaceholder.typicode.com/posts');
+};
 
 export default function ConfigForm() {
   // -----------------------------   HOOKS   --------------------->
@@ -50,15 +53,15 @@ export default function ConfigForm() {
   const [client_secret, setClientSecret] = useState(
     '300dad74-5367-4365-af4f-46b5a71628df'
   );
-  const [preparer_id, setPreparerId] = useState('');
+  const [preparer_id, setPreparerId] = useState('preparer-98beeb07-5a58-4473-8348-305462592aa2');
   const [token, setToken] = useState('');
 
   //edit visible body hook
   const [visible, setVisible] = useState(false);
 
   //order body data variables
-  const [orderNumber, setOrderNumber] = useState('');
-  const [orderDescription, setOrderDescription] = useState('');
+  const [orderNumber, setOrderNumber] = useState('1337');
+  const [orderDescription, setOrderDescription] = useState('very tastey and very real food to eat');
 
   //headers hook
   const [headers, setHeaders] = useState<Object>({
@@ -97,7 +100,9 @@ export default function ConfigForm() {
     { value: 'get-clients', label: 'Get All Clients', group: 'Clients' },
   ];
 
-  const orderDetailsBodyRaw = `{\n  \"siteId\": \"{}\",
+  // create an axios request with the body in raw format
+
+  const orderDetailsBodyRaw = `{\n  \"siteId\": \"${preparer_id}\",
   \n  \"extOrderId\": \"${orderNumber}\",
   \n  \"orderDescription\": \"${orderDescription}\",
   \n  \"orderExpirationDate\": \"1672852224000\",
@@ -270,201 +275,9 @@ export default function ConfigForm() {
 
   return (
     <Container className="contain">
+      <Space h="sm" />
       <form className="auth" onSubmit={handleSubmit}>
         <Grid>
-          <Grid.Col>
-            <Space h="md" />
-            <Grid.Col className="user-creds">
-              <Box className="section-bg">
-                <Box>
-                  <Title pb="8px" align="center" order={4}>
-                    Authentication
-                  </Title>
-                  <Group grow>
-                    <TextInput
-                      radius="sm"
-                      name="clientId"
-                      size="xs"
-                      placeholder="Client ID"
-                      // {...form.getInputProps('client_id')}
-                      value={client_id}
-                      onChange={handleChange}
-                    />
-                    <TextInput
-                      radius="sm"
-                      name="clientSecret"
-                      size="xs"
-                      placeholder="Client Secret"
-                      value={client_secret}
-                      onChange={handleChange}
-                    />
-                  </Group>
-                </Box>
-                <Space h="xs" />
-                <Divider />
-                <Group pb="12px" grow align="flex-end" position="center">
-                  <Select
-                    size="xs"
-                    label="Server URL:"
-                    defaultValue={'https://qa-gimli.ci.apexpickup.com'}
-                    data={[
-                      {
-                        name: 'QA',
-                        value: 'https://qa-gimli.ci.apexpickup.com',
-                        label: 'QA ',
-                      },
-                      {
-                        name: 'UAT',
-                        value: 'https://uat-gimli.stg.apexpickup.com',
-                        label: 'UAT',
-                      },
-                    ]}
-                    onChange={handleUrlChange}
-                  />
-                  <Select
-                    size="xs"
-                    label="Action: "
-                    placeholder="Select action"
-                    data={conditionalParams}
-                    onChange={handleActionChange}
-                    value={actionSelector}
-                  />
-                </Group>
-                <Divider />
-                {actionSelector === '' && (
-                  <>
-                    <Box className="dynamic-fields">
-                      <Text
-                        sx={{
-                          paddingTop: '28px',
-                          fontStyle: 'italic',
-                        }}
-                        align="center"
-                      >
-                        Please select action.
-                      </Text>
-                    </Box>
-                  </>
-                )}
-                {actionSelector === 'get-orders' && (
-                  <>
-                    <Paper
-                      sx={{
-                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
-                      }}
-                      p="xs"
-                    >
-                      <TextInput
-                        label="Preparer ID:"
-                        radius="sm"
-                        name="preparerId"
-                        size="xs"
-                        placeholder="Preparer ID"
-                        value={preparer_id}
-                        onChange={handleChange}
-                      />
-                      {bodyObjInput()}
-                      <Space h="sm" />
-                      {sendRequestButton()}
-                    </Paper>
-                  </>
-                )}
-                {actionSelector === 'create-order' && (
-                  <>
-                    <Paper
-                      sx={{
-                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
-                      }}
-                      p="xs"
-                    >
-                      <TextInput
-                        label="Preparer ID:"
-                        radius="sm"
-                        name="preparerId"
-                        size="xs"
-                        placeholder="Preparer ID"
-                        value={preparer_id}
-                        onChange={handleChange}
-                      />
-                      {bodyObjInput()}
-                      <Space h="sm" />
-                      {sendRequestButton()}
-                    </Paper>
-                  </>
-                )}
-                {actionSelector === 'get-order-site-id' && (
-                  <>
-                    <Paper
-                      sx={{
-                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
-                      }}
-                      p="xs"
-                    >
-                      <TextInput
-                        label="Preparer ID:"
-                        radius="sm"
-                        name="preparerId"
-                        size="xs"
-                        placeholder="Preparer ID"
-                        value={preparer_id}
-                        onChange={handleChange}
-                      />
-                      {bodyObjInput()}
-                      <Space h="sm" />
-                      {sendRequestButton()}
-                    </Paper>
-                  </>
-                )}
-                {actionSelector === 'get-order-schedule-id' && (
-                  <>
-                    <Paper
-                      sx={{
-                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
-                      }}
-                      p="xs"
-                    >
-                      <TextInput
-                        label="Preparer ID:"
-                        radius="sm"
-                        name="preparerId"
-                        size="xs"
-                        placeholder="Preparer ID"
-                        value={preparer_id}
-                        onChange={handleChange}
-                      />
-                      {bodyObjInput()}
-                      <Space h="sm" />
-                      {sendRequestButton()}
-                    </Paper>
-                  </>
-                )}
-                {actionSelector === 'get-clients' && (
-                  <>
-                    <Paper
-                      sx={{
-                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
-                      }}
-                      p="xs"
-                    >
-                      <TextInput
-                        label="Preparer ID:"
-                        radius="sm"
-                        name="preparerId"
-                        size="xs"
-                        placeholder="Preparer ID"
-                        value={preparer_id}
-                        onChange={handleChange}
-                      />
-                      {bodyObjInput()}
-                      <Space h="sm" />
-                      {sendRequestButton()}
-                    </Paper>
-                  </>
-                )}
-              </Box>
-            </Grid.Col>
-            <Space h="md" />
-          </Grid.Col>
           <Grid.Col sm={12}>
             <Tabs color="cyan" radius="md" defaultValue="headers">
               <Tabs.List>
@@ -655,6 +468,216 @@ export default function ConfigForm() {
                 </Grid>
               </Tabs.Panel>
             </Tabs>
+          </Grid.Col>
+          <Grid.Col>
+            <Space h="xs" />
+            <Grid.Col className="user-creds">
+              <Box className="section-bg">
+                <Box>
+                  <Title pb="8px" align="center" order={4}>
+                    Authentication
+                  </Title>
+                  <Group grow>
+                    <TextInput
+                      radius="sm"
+                      name="clientId"
+                      size="xs"
+                      placeholder="Client ID"
+                      // {...form.getInputProps('client_id')}
+                      value={client_id}
+                      onChange={handleChange}
+                    />
+                    <TextInput
+                      radius="sm"
+                      name="clientSecret"
+                      size="xs"
+                      placeholder="Client Secret"
+                      value={client_secret}
+                      onChange={handleChange}
+                    />
+                  </Group>
+                </Box>
+                <Space h="xs" />
+                <Divider />
+                <Group pb="12px" grow align="flex-end" position="center">
+                  <Select
+                    size="xs"
+                    label="Server URL:"
+                    defaultValue={'https://qa-gimli.ci.apexpickup.com'}
+                    data={[
+                      {
+                        name: 'QA',
+                        value: 'https://qa-gimli.ci.apexpickup.com',
+                        label: 'QA ',
+                      },
+                      {
+                        name: 'UAT',
+                        value: 'https://uat-gimli.stg.apexpickup.com',
+                        label: 'UAT',
+                      },
+                    ]}
+                    onChange={handleUrlChange}
+                  />
+                  <Select
+                    size="xs"
+                    label="Action: "
+                    placeholder="Select action"
+                    data={conditionalParams}
+                    onChange={handleActionChange}
+                    value={actionSelector}
+                  />
+                </Group>
+                <Divider />
+                {actionSelector === '' && (
+                  <>
+                    <Box className="dynamic-fields">
+                      <Text
+                        sx={{
+                          paddingTop: '28px',
+                          fontStyle: 'italic',
+                        }}
+                        align="center"
+                      >
+                        Please select action.
+                      </Text>
+                    </Box>
+                  </>
+                )}
+                {actionSelector === 'get-orders' && (
+                  <>
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                      }}
+                      p="xs"
+                    >
+                      <TextInput
+                        label="Preparer ID:"
+                        radius="sm"
+                        name="preparerId"
+                        size="xs"
+                        placeholder="Preparer ID"
+                        value={preparer_id}
+                        onChange={handleChange}
+                      />
+                      {bodyObjInput()}
+                      <Space h="sm" />
+                      {sendRequestButton()}
+                    </Paper>
+                  </>
+                )}
+                {actionSelector === 'create-order' && (
+                  <>
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                      }}
+                      p="xs"
+                    >
+                      <TextInput
+                        label="Preparer ID:"
+                        radius="sm"
+                        name="preparerId"
+                        size="xs"
+                        placeholder="Preparer ID"
+                        value={preparer_id}
+                        onChange={handleChange}
+                      />
+                      {bodyObjInput()}
+                      <Space h="sm" />
+                      {sendRequestButton()}
+                    </Paper>
+                  </>
+                )}
+                {actionSelector === 'get-order-site-id' && (
+                  <>
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                      }}
+                      p="xs"
+                    >
+                      <TextInput
+                        label="Preparer ID:"
+                        radius="sm"
+                        name="preparerId"
+                        size="xs"
+                        placeholder="Preparer ID"
+                        value={preparer_id}
+                        onChange={handleChange}
+                      />
+                      {bodyObjInput()}
+                      <Space h="sm" />
+                      {sendRequestButton()}
+                    </Paper>
+                  </>
+                )}
+                {actionSelector === 'get-order-schedule-id' && (
+                  <>
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                      }}
+                      p="xs"
+                    >
+                      <TextInput
+                        label="Preparer ID:"
+                        radius="sm"
+                        name="preparerId"
+                        size="xs"
+                        placeholder="Preparer ID"
+                        value={preparer_id}
+                        onChange={handleChange}
+                      />
+                      {bodyObjInput()}
+                      <Space h="sm" />
+                      {sendRequestButton()}
+                    </Paper>
+                  </>
+                )}
+                {actionSelector === 'get-clients' && (
+                  <>
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgba(0, 217, 255, 0.0)',
+                      }}
+                      p="xs"
+                    >
+                      <TextInput
+                        label="Preparer ID:"
+                        radius="sm"
+                        name="preparerId"
+                        size="xs"
+                        placeholder="Preparer ID"
+                        value={preparer_id}
+                        onChange={handleChange}
+                      />
+                      {bodyObjInput()}
+                      <Space h="sm" />
+                      {sendRequestButton()}
+                    </Paper>
+                  </>
+                )}
+              </Box>
+            </Grid.Col>
+          </Grid.Col>
+          <Grid.Col className='test'>
+            <Paper>
+              <Box
+                sx={{
+                  overflowX: 'hidden',
+                  border: '1px solid #00000025',
+                  borderRadius: '4px',
+                  backgroundColor: 'white',
+                }}
+                p={2}
+              >
+                <Group align="center" position="center" grow>
+
+
+                </Group>
+              </Box>
+            </Paper>
           </Grid.Col>
         </Grid>
       </form>

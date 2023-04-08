@@ -16,12 +16,11 @@
   justify-content: space-between;
   align-items: center;
   border: 1px solid #000000;
-  /* background-color: rgb(154, 240, 255); */
   background-color: #222629;
 }
 
 .logo {
-  color: #F5F5F5;
+  color: #b7ffff;
 }
 
 .title {
@@ -40,7 +39,7 @@
 }
 
 .btn-top {
-  color: #EFF0F1 !important;
+  color: #b7ffff !important;
 }
 
 

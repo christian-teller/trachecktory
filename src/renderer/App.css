@@ -1,5 +1,5 @@
  .simplebar-scrollbar::before {
-  background-color: #00f7d6b9;
+  background-color: #000000b9;
 }
 
 .added-headers-box {
@@ -38,7 +38,7 @@
 .btn-blue {
   color: black !important;
   border: 1px solid rgba(0, 0, 0, 0.178);
-  background-color: #C7C7C7 !important;
+  background-color: #00ffff41 !important;
 }
 
 .btn-red {
