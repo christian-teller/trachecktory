@@ -21,13 +21,14 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { CubeSend, TrashX, ChevronDown, Tie } from 'tabler-icons-react';
+import { Checkbox, Mail, ChevronDown, Settings, Key } from 'tabler-icons-react';
 import qs from 'qs';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import './App.css';
 
 import { render } from '@testing-library/react';
+import Results from './Results';
 
 const axiosApiInstance = axios.create();
 const getPosts = () => {
@@ -128,7 +129,7 @@ export default function ConfigForm() {
       }
     };
 
-    let editBox: boolean = false;
+    let editBox: any = false;
     if (visible) {
       editBox = (
         <Paper
@@ -298,17 +299,20 @@ export default function ConfigForm() {
           <Grid.Col sm={12}>
             <Tabs color="cyan" radius="md" defaultValue="headers">
               <Tabs.List>
-                <Tabs.Tab value="headers" icon={<CubeSend size="0.8rem" />}>
+                <Tabs.Tab value="headers" icon={<Mail size="0.8rem" />}>
                   Headers
                 </Tabs.Tab>
-                <Tabs.Tab value="show-token" icon={<CubeSend size="0.8rem" />}>
+                <Tabs.Tab value="show-token" icon={<Key size="0.8rem" />}>
                   Show Token
                 </Tabs.Tab>
                 <Tabs.Tab
                   value="server-settings"
-                  icon={<CubeSend size="0.8rem" />}
+                  icon={<Settings size="0.8rem" />}
                 >
                   Settings
+                </Tabs.Tab>
+                <Tabs.Tab value="results" icon={<Checkbox size="0.8rem" />}>
+                  Results
                 </Tabs.Tab>
               </Tabs.List>
 
@@ -481,6 +485,28 @@ export default function ConfigForm() {
                       <b>Client Secret: </b>
                       {client_secret}
                     </p>
+                  </Grid.Col>
+                </Grid>
+              </Tabs.Panel>
+              <Tabs.Panel
+                value="results"
+                pt="xs"
+                sx={{
+                  borderLeft: '1px solid rgba(0, 0, 0, 0.1)',
+                  borderRight: '1px solid rgba(0, 0, 0, 0.1)',
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                  borderRadius: '0 0 8px 8px',
+                  background: '#EFF0F1',
+                }}
+              >
+                <Grid
+                  grow
+                  sx={{
+                    padding: '0 16px 8px 16px',
+                  }}
+                >
+                  <Grid.Col>
+                    <Results token={token} responseStatus={'404'} />
                   </Grid.Col>
                 </Grid>
               </Tabs.Panel>
@@ -700,21 +726,6 @@ export default function ConfigForm() {
                 )}
               </Box>
             </Grid.Col>
-          </Grid.Col>
-          <Grid.Col className="test">
-            <Paper>
-              <Box
-                sx={{
-                  overflowX: 'hidden',
-                  border: '1px solid #00000025',
-                  borderRadius: '4px',
-                  backgroundColor: 'white',
-                }}
-                p={2}
-              >
-                <Group align="center" position="center" grow></Group>
-              </Box>
-            </Paper>
           </Grid.Col>
         </Grid>
       </form>

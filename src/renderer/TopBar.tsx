@@ -12,9 +12,9 @@ import './App.css';
 import './Shell.css';
 
 export default function TopBar() {
-
   const closeApp = () => {
-    window.prompt('test');
+    window.confirm('Would you like to close the application?') &&
+      window.close();
   };
 
   return (
@@ -35,17 +35,13 @@ export default function TopBar() {
               </Group>
             </Grid.Col>
             <Grid.Col span={6}>
-              <Group
-                align="center"
-                position="right"
-                className="btn-top-grp"
-              >
+              <Group align="center" position="right" className="btn-top-grp">
                 <ActionIcon
                   id="closeBtn"
                   className="btn-top no-drag"
                   variant="transparent"
                 >
-                  <X onClick={closeApp}/>
+                  <X onClick={closeApp} />
                 </ActionIcon>
               </Group>
             </Grid.Col>
