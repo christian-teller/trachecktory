@@ -53,7 +53,9 @@ export default function ConfigForm() {
   const [client_secret, setClientSecret] = useState(
     '300dad74-5367-4365-af4f-46b5a71628df'
   );
-  const [preparer_id, setPreparerId] = useState('preparer-98beeb07-5a58-4473-8348-305462592aa2');
+  const [preparer_id, setPreparerId] = useState(
+    'preparer-98beeb07-5a58-4473-8348-305462592aa2'
+  );
   const [token, setToken] = useState('');
 
   //edit visible body hook
@@ -61,7 +63,9 @@ export default function ConfigForm() {
 
   //order body data variables
   const [orderNumber, setOrderNumber] = useState('1337');
-  const [orderDescription, setOrderDescription] = useState('very tastey and very real food to eat');
+  const [orderDescription, setOrderDescription] = useState(
+    'very tastey and very real food to eat'
+  );
 
   //headers hook
   const [headers, setHeaders] = useState<Object>({
@@ -71,6 +75,7 @@ export default function ConfigForm() {
   const [key, setKey] = useState<string>('');
   const [value, setValue] = useState<string>('');
   //url hook
+  const [customUrl, setCustomUrl] = useState<boolean>(false);
   const [apiUrl, setApiUrl] = useState<string>(
     'https://qa-gimli.ci.apexpickup.com'
   );
@@ -200,11 +205,23 @@ export default function ConfigForm() {
     } else if (name === 'orderNumber') {
       setOrderNumber(value);
       console.log(orderNumber);
+    } else if (name === 'custom-url') {
+      console.log('custom url selected');
     }
   };
 
   // server and endpoint handler
-  const handleUrlChange = (e: string) => setApiUrl(e);
+  const handleUrlChange = (e: string) => {
+    console.log('value is: ' + e);
+    console.log('header of url is: ' + apiUrl);
+    if (e === 'custom-url') {
+      setApiUrl('');
+      setCustomUrl(true);
+    } else {
+      setApiUrl(e);
+      setCustomUrl(false);
+    }
+  };
   const handleEndpointChange = (e: string) => setEndpoint(e);
 
   // removing header btn click handler
@@ -511,9 +528,19 @@ export default function ConfigForm() {
                         label: 'QA ',
                       },
                       {
+                        name: 'QA2',
+                        value: 'https://qa2-gimli.ci.apexpickup.com',
+                        label: 'QA2 ',
+                      },
+                      {
                         name: 'UAT',
                         value: 'https://uat-gimli.stg.apexpickup.com',
                         label: 'UAT',
+                      },
+                      {
+                        name: 'custom',
+                        value: 'custom-url',
+                        label: 'Custom',
                       },
                     ]}
                     onChange={handleUrlChange}
@@ -527,6 +554,19 @@ export default function ConfigForm() {
                     value={actionSelector}
                   />
                 </Group>
+                {customUrl === true && (
+                  <>
+                    <TextInput
+                      size="xs"
+                      placeholder="https://your-custom-url.com"
+                      onChange={(e) => {
+                        setApiUrl(e.target.value);
+                        console.log(apiUrl);
+                      }}
+                    />
+                    <Space h={16} />
+                  </>
+                )}
                 <Divider />
                 {actionSelector === '' && (
                   <>
@@ -661,7 +701,7 @@ export default function ConfigForm() {
               </Box>
             </Grid.Col>
           </Grid.Col>
-          <Grid.Col className='test'>
+          <Grid.Col className="test">
             <Paper>
               <Box
                 sx={{
@@ -672,10 +712,7 @@ export default function ConfigForm() {
                 }}
                 p={2}
               >
-                <Group align="center" position="center" grow>
-
-
-                </Group>
+                <Group align="center" position="center" grow></Group>
               </Box>
             </Paper>
           </Grid.Col>

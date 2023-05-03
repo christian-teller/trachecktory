@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
+
 export type Channels = 'ipc-example';
 
 const electronHandler = {
@@ -23,6 +24,13 @@ const electronHandler = {
     },
   },
 };
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('closeBtn')?.addEventListener('click', () => {
+    ipcRenderer.invoke('quit-app');
+    console.log('quit app clicked');
+  });
+});
 
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

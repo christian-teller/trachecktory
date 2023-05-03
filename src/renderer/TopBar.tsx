@@ -12,6 +12,11 @@ import './App.css';
 import './Shell.css';
 
 export default function TopBar() {
+
+  const closeApp = () => {
+    window.prompt('test');
+  };
+
   return (
     <>
       <Header className="title-bar drag" height={{ base: 60, md: 60 }}>
@@ -40,7 +45,7 @@ export default function TopBar() {
                   className="btn-top no-drag"
                   variant="transparent"
                 >
-                  <X />
+                  <X onClick={closeApp}/>
                 </ActionIcon>
               </Group>
             </Grid.Col>
