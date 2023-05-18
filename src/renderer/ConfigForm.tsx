@@ -236,7 +236,7 @@ export default function ConfigForm() {
   // big submit button click
   const handleSubmit = () => {
     grabToken;
-    console.log(token);
+    makeRequest;
   };
 
   // axios passthrough
@@ -272,7 +272,21 @@ export default function ConfigForm() {
   };
 
   const makeRequest = (e: any) => {
-    e.preventDefault();
+    axios
+      .post(
+        apiUrl + endpoint,
+        orderDetailsBodyRaw,
+        {headers},
+      )
+      .then(function (response: any) {
+        console.log(response);
+        console.log(response.status);
+        console.log(response.data);
+        return response;
+      })
+      .catch(function (error: any) {
+        console.log(error.message);
+      });
     // grabToken();
   };
 
