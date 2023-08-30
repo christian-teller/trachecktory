@@ -30,11 +30,6 @@ import './App.css';
 import { render } from '@testing-library/react';
 import Results from './Results';
 
-const axiosApiInstance = axios.create();
-const getPosts = () => {
-  return axiosApiInstance.get('https://jsonplaceholder.typicode.com/posts');
-};
-
 export default function ConfigForm() {
   // -----------------------------   HOOKS   --------------------->
   // Request Config Hooks:
@@ -55,7 +50,7 @@ export default function ConfigForm() {
     '300dad74-5367-4365-af4f-46b5a71628df'
   );
   const [preparer_id, setPreparerId] = useState(
-    'preparer-98beeb07-5a58-4473-8348-305462592aa2'
+    'preparer-73e5213a-0af1-420a-8534-14e338cab09e'
   );
   const [token, setToken] = useState('');
 
@@ -84,10 +79,88 @@ export default function ConfigForm() {
 
   // -----------------------   HANDLERS   ------------------------->
   // action selected handler and conditional input content
+
+  const getClients = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/clients?accountNumber=`, {
+        headers: {
+          preparerId: preparer_id,
+        },
+        auth: {
+          username: client_id,
+          password: client_secret,
+        },
+      });
+      // Handle the response (e.g., set it to a state variable or display it)
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+    }
+  };
+
+  const getSchedules = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/schedules?accountNumber=`, {
+        headers: {
+          preparerId: preparer_id,
+        },
+        auth: {
+          username: client_id,
+          password: client_secret,
+        },
+      });
+      // Handle the response (e.g., set it to a state variable or display it)
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+    }
+  };
+
+
+  let data = qs.stringify({
+    siteId: `${preparer_id}`,
+    extOrderId: `${orderNumber}`,
+    orderDescription: `${orderDescription}`,
+  });
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://qa-gimli.ci.apexpickup.com/delivery_order/orders',
+    headers: {
+      preparerid: `${preparer_id}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization:
+        `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  const createOrder = async () => {
+
+    try {
+      grabToken;
+      console.log(';oafjhd;oifj');
+      axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      // Handle the response (e.g., set it to a state variable or display it)
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+
+  }
+
   const handleActionChange = (e: any) => {
     setActionSelector(e);
-    console.log(actionSelector);
-    console.log(e);
+    console.log('action selector: ' + actionSelector);
+    console.log('event info: ' + e);
+    if (e === 'get-clients') {
+      getClients();
+    }
   };
 
   const conditionalParams = [
@@ -184,6 +257,15 @@ export default function ConfigForm() {
           </Button>
         </Group>
         {editBox}
+        <Button
+          className="btn-blue"
+            size="xs"
+            sx={{
+              borderRadius: '0 0 4px 4px',
+            }}
+            onClick={(createOrder)}>
+              Create Order
+            </Button>
       </>
     );
   };
@@ -262,6 +344,7 @@ export default function ConfigForm() {
       .then(function (response: any) {
         console.log(response);
         console.log(response.status);
+        Results(response.status);
         console.log(response.data.access_token);
         setToken(response.data.access_token);
         return response;
@@ -273,11 +356,7 @@ export default function ConfigForm() {
 
   const makeRequest = (e: any) => {
     axios
-      .post(
-        apiUrl + endpoint,
-        orderDetailsBodyRaw,
-        {headers},
-      )
+      .post(apiUrl + endpoint, orderDetailsBodyRaw, { headers })
       .then(function (response: any) {
         console.log(response);
         console.log(response.status);
