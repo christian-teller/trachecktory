@@ -7,7 +7,7 @@ function Results(props:any) {
     <>
       <Group position="left">
         <p>
-          <b>Status: </b>{props.response} <br />
+          <b>Status: </b>{props.responseStatus} <br />
           {props.token}
         </p>
       </Group>

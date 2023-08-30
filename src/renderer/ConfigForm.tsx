@@ -53,6 +53,7 @@ export default function ConfigForm() {
     'preparer-73e5213a-0af1-420a-8534-14e338cab09e'
   );
   const [token, setToken] = useState('');
+  const [lastResponse, setLastResponse] = useState();
 
   //edit visible body hook
   const [visible, setVisible] = useState(false);
@@ -114,7 +115,6 @@ export default function ConfigForm() {
     }
   };
 
-
   let data = qs.stringify({
     siteId: `${preparer_id}`,
     extOrderId: `${orderNumber}`,
@@ -128,31 +128,32 @@ export default function ConfigForm() {
     headers: {
       preparerid: `${preparer_id}`,
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization:
-        `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     data: data,
   };
 
   const createOrder = async () => {
-
     try {
       grabToken;
-      console.log(';oafjhd;oifj');
       axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          setLastResponse(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLastResponse(error.stringify);
+          console.log("==========| Nope, something ain't right |===========");
+          console.log("Response status code: " + error.response.data.statusCode);
+          console.log("Error message: " + error.response.data.message);
+        });
       // Handle the response (e.g., set it to a state variable or display it)
     } catch (error) {
       console.error('Error creating order:', error);
     }
-
-  }
+  };
 
   const handleActionChange = (e: any) => {
     setActionSelector(e);
@@ -257,15 +258,6 @@ export default function ConfigForm() {
           </Button>
         </Group>
         {editBox}
-        <Button
-          className="btn-blue"
-            size="xs"
-            sx={{
-              borderRadius: '0 0 4px 4px',
-            }}
-            onClick={(createOrder)}>
-              Create Order
-            </Button>
       </>
     );
   };
@@ -367,21 +359,6 @@ export default function ConfigForm() {
         console.log(error.message);
       });
     // grabToken();
-  };
-
-  const sendRequestButton = () => {
-    return (
-      <Group position="right">
-        <Button
-          className="btn-blue"
-          color="cyan"
-          size="md"
-          onClick={handleSubmit}
-        >
-          Send
-        </Button>
-      </Group>
-    );
   };
 
   return (
@@ -599,7 +576,7 @@ export default function ConfigForm() {
                   }}
                 >
                   <Grid.Col>
-                    <Results token={token} responseStatus={'404'} />
+                    <Results token={token} responseStatus={lastResponse} />
                   </Grid.Col>
                 </Grid>
               </Tabs.Panel>
@@ -721,7 +698,6 @@ export default function ConfigForm() {
                       />
                       {bodyObjInput()}
                       <Space h="sm" />
-                      {sendRequestButton()}
                     </Paper>
                   </>
                 )}
@@ -744,7 +720,16 @@ export default function ConfigForm() {
                       />
                       {bodyObjInput()}
                       <Space h="sm" />
-                      {sendRequestButton()}
+                      <Button
+                        className="btn-blue"
+                        size="xs"
+                        sx={{
+                          borderRadius: '0 0 4px 4px',
+                        }}
+                        onClick={createOrder}
+                      >
+                        Create Order
+                      </Button>
                     </Paper>
                   </>
                 )}
@@ -767,7 +752,6 @@ export default function ConfigForm() {
                       />
                       {bodyObjInput()}
                       <Space h="sm" />
-                      {sendRequestButton()}
                     </Paper>
                   </>
                 )}
@@ -790,7 +774,6 @@ export default function ConfigForm() {
                       />
                       {bodyObjInput()}
                       <Space h="sm" />
-                      {sendRequestButton()}
                     </Paper>
                   </>
                 )}
@@ -813,7 +796,6 @@ export default function ConfigForm() {
                       />
                       {bodyObjInput()}
                       <Space h="sm" />
-                      {sendRequestButton()}
                     </Paper>
                   </>
                 )}
